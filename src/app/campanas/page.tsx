@@ -39,7 +39,7 @@ export function Campanas() {
     },
   ]);
 
-  const [data, setData] = useState<any>()
+  const [data, setData] = useState<any>();
 
   return (
     <div className="space-y-4">
@@ -53,12 +53,26 @@ export function Campanas() {
             <DialogHeader>
               <DialogTitle>Crear Nueva Campaña</DialogTitle>
             </DialogHeader>
-            <form className="space-y-4" onSubmit={e => {
-              e.preventDefault();
-            }}>
+            <form
+              className="space-y-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                setCampanas([
+                  ...campanas,
+                  {
+                    id: 3,
+                    nombre: "Campaña Jovenes",
+                    objetivo: 30000,
+                    descripcion: "Jovenes Necesitados",
+                    fechaInicio: "2024-12-01",
+                    fechaFin: "2025-12-31",
+                  },
+                ]);
+              }}
+            >
               <div>
                 <Label htmlFor="nombre">Nombre</Label>
-                <Input id="nombre" />
+                <Input id="nombre" onChange={(e) => setData({ ...data })} />
               </div>
               <div>
                 <Label htmlFor="objetivo">Objetivo ($)</Label>

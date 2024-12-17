@@ -1,17 +1,13 @@
-
-import { Navbar } from '@/components/Navbar'
-import {Outlet} from 'react-router'
+import { Navbar } from "@/components/Navbar";
+import { Toaster } from "@/components/ui/toaster";
+import { Outlet } from "react-router-dom";
 
 export function RootLayout() {
   return (
-    <html lang="es">
-      <body className={''}>
-        <Navbar />
-        <main className="container mx-auto p-4">
-          {<Outlet/>}
-        </main>
-      </body>
-    </html>
-  )
+    <>
+      <Navbar />
+      <main className="container mx-auto p-4">{<Outlet />}</main>
+      <Toaster />
+    </>
+  );
 }
-

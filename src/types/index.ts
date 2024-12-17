@@ -21,6 +21,8 @@ export type DonorDto = {
   addres: string;
 };
 
+export type AddDonorRequest = Omit<DonorDto, 'id'>;
+
 export type ReportDto = {
   generateDate: string;
   totalDonated: number;

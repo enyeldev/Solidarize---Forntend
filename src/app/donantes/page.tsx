@@ -1,24 +1,42 @@
-'use client'
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
+//Custom hook
+import { useDonantes } from "./hooks/useDonates";
 
 export function Donantes() {
-  const [donantes, setDonantes] = useState([
-    { id: 1, nombre: 'Juan Pérez', correo: 'juan@example.com', telefono: '123456789', direccion: 'Calle 123' },
-    { id: 2, nombre: 'María García', correo: 'maria@example.com', telefono: '987654321', direccion: 'Avenida 456' },
-  ])
-
-  const [busqueda, setBusqueda] = useState('')
-
-  const donantesFiltrados = donantes.filter(donante =>
-    donante.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-    donante.correo.toLowerCase().includes(busqueda.toLowerCase())
-  )
+  const {
+    donantesFiltrados,
+    setBusqueda,
+    busqueda,
+    handleSubmit,
+    setNewDonor,
+    handleRemove,
+    showSkeleton,
+    setShowModalEdit,
+    showModalEdit,
+    handleSetEdit,
+    editData,
+    setEditData,
+    handleEdit
+  } = useDonantes();
 
   return (
     <div className="space-y-4">
@@ -38,54 +56,246 @@ export function Donantes() {
             <DialogHeader>
               <DialogTitle>Agregar Nuevo Donante</DialogTitle>
             </DialogHeader>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
-                <Label htmlFor="nombre">Nombre</Label>
-                <Input id="nombre" />
+                <Label htmlFor="name">Nombre</Label>
+                <Input
+                  id="name"
+                  onChange={(e) =>
+                    setNewDonor((prev) => ({
+                      ...prev,
+                      [e.target.id]: e.target.value,
+                    }))
+                  }
+                />
               </div>
               <div>
-                <Label htmlFor="correo">Correo</Label>
-                <Input id="correo" type="email" />
+                <Label htmlFor="email">Correo</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  onChange={(e) =>
+                    setNewDonor((prev) => ({
+                      ...prev,
+                      [e.target.id]: e.target.value,
+                    }))
+                  }
+                />
               </div>
               <div>
-                <Label htmlFor="telefono">Teléfono</Label>
-                <Input id="telefono" />
+                <Label htmlFor="phone">Teléfono</Label>
+                <Input
+                  id="phone"
+                  onChange={(e) =>
+                    setNewDonor((prev) => ({
+                      ...prev,
+                      [e.target.id]: e.target.value,
+                    }))
+                  }
+                />
               </div>
               <div>
-                <Label htmlFor="direccion">Dirección</Label>
-                <Input id="direccion" />
+                <Label htmlFor="addres">Dirección</Label>
+                <Input
+                  id="addres"
+                  onChange={(e) =>
+                    setNewDonor((prev) => ({
+                      ...prev,
+                      [e.target.id]: e.target.value,
+                    }))
+                  }
+                />
               </div>
               <Button type="submit">Guardar</Button>
             </form>
           </DialogContent>
         </Dialog>
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Nombre</TableHead>
-            <TableHead>Correo</TableHead>
-            <TableHead>Teléfono</TableHead>
-            <TableHead>Dirección</TableHead>
-            <TableHead>Acciones</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {donantesFiltrados.map((donante) => (
-            <TableRow key={donante.id}>
-              <TableCell>{donante.nombre}</TableCell>
-              <TableCell>{donante.correo}</TableCell>
-              <TableCell>{donante.telefono}</TableCell>
-              <TableCell>{donante.direccion}</TableCell>
+
+      {showSkeleton ? (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nombre</TableHead>
+              <TableHead>Correo</TableHead>
+              <TableHead>Teléfono</TableHead>
+              <TableHead>Dirección</TableHead>
+              <TableHead>Acciones</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
               <TableCell>
-                <Button variant="outline" size="sm" className="mr-2">Editar</Button>
-                <Button variant="destructive" size="sm">Eliminar</Button>
+                <Skeleton className="w-24 h-5" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="w-24 h-5" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="w-24 h-5" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="w-24 h-5" />
+              </TableCell>
+              <TableCell>
+                <div className="flex gap-4">
+                  <Skeleton className="w-28 h-8" />
+                  <Skeleton className="w-28 h-8" />
+                </div>
               </TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  )
-}
 
+            <TableRow>
+              <TableCell>
+                <Skeleton className="w-24 h-5" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="w-24 h-5" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="w-24 h-5" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="w-24 h-5" />
+              </TableCell>
+              <TableCell>
+                <div className="flex gap-4">
+                  <Skeleton className="w-28 h-8" />
+                  <Skeleton className="w-28 h-8" />
+                </div>
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell>
+                <Skeleton className="w-24 h-5" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="w-24 h-5" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="w-24 h-5" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="w-24 h-5" />
+              </TableCell>
+              <TableCell>
+                <div className="flex gap-4">
+                  <Skeleton className="w-28 h-8" />
+                  <Skeleton className="w-28 h-8" />
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      ) : donantesFiltrados.length === 0 ? (
+        <h1 className="text-center text-2xl font-bold">No hay donantes</h1>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nombre</TableHead>
+              <TableHead>Correo</TableHead>
+              <TableHead>Teléfono</TableHead>
+              <TableHead>Dirección</TableHead>
+              <TableHead>Acciones</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {donantesFiltrados.map(({ addres, email, id, name, phone }) => (
+              <TableRow key={id}>
+                <TableCell>{name}</TableCell>
+                <TableCell>{email}</TableCell>
+                <TableCell>{phone}</TableCell>
+                <TableCell>{addres}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mr-2"
+                    onClick={() =>
+                      handleSetEdit({ addres, email, id, name, phone })
+                    }
+                  >
+                    Editar
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => handleRemove(id)}
+                  >
+                    Eliminar
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+
+      <Dialog open={showModalEdit} onOpenChange={(e) => setShowModalEdit(e)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Donante</DialogTitle>
+          </DialogHeader>
+          <form className="space-y-4" onSubmit={handleEdit}>
+            <div>
+              <Label htmlFor="name">Nombre</Label>
+              <Input
+                id="name"
+                onChange={(e) =>
+                  setEditData((prev) => ({
+                    ...prev,
+                    [e.target.id]: e.target.value,
+                  }))
+                }
+                value={editData.name}
+              />
+            </div>
+            <div>
+              <Label htmlFor="email">Correo</Label>
+              <Input
+                id="email"
+                type="email"
+                onChange={(e) =>
+                  setEditData((prev) => ({
+                    ...prev,
+                    [e.target.id]: e.target.value,
+                  }))
+                }
+                value={editData.email}
+              />
+            </div>
+            <div>
+              <Label htmlFor="phone">Teléfono</Label>
+              <Input
+                id="phone"
+                onChange={(e) =>
+                  setEditData((prev) => ({
+                    ...prev,
+                    [e.target.id]: e.target.value,
+                  }))
+                }
+                value={editData.phone}
+              />
+            </div>
+            <div>
+              <Label htmlFor="addres">Dirección</Label>
+              <Input
+                id="addres"
+                onChange={(e) =>
+                  setEditData((prev) => ({
+                    ...prev,
+                    [e.target.id]: e.target.value,
+                  }))
+                }
+                value={editData.addres}
+              />
+            </div>
+            <Button type="submit">Editar</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
